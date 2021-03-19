@@ -1,0 +1,4 @@
+{
+  "dbUri": "mongodb://localhost/omnihelpdesklight",
+  "jwtSecret": "a secret phrase!!"
+}

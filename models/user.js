@@ -1,88 +1,54 @@
 const mongoose = require("mongoose");
-const { MongooseAutoIncrementID } = require("mongoose-auto-increment-reworked");
 const bcrypt = require("bcryptjs");
-const R = require("ramda");
 
-const { Schema } = mongoose;
-
-const userSchema = new Schema({
-  username: {
+// define the User model schema
+const UserSchema = new mongoose.Schema({
+  email: {
     type: String,
-    lowercase: true,
-    required: true,
-    unique: true,
-    immutable: true,
+    index: { unique: true },
   },
-  username_case: { type: String, required: true },
-  password: { type: String, required: true },
-  profile_pic: { type: String },
-  first_name: { type: String, maxlength: 20 },
-  last_name: { type: String, maxlength: 20 },
-  bio: { type: String, maxlength: 240 },
-  created_at: { type: Date, default: Date.now, immutable: true },
-  updated_at: { type: Date },
+  password: String,
+  name: String,
 });
 
-if (process.env.NODE_ENV !== "test") {
-  MongooseAutoIncrementID.initialise("counters");
-
-  userSchema.plugin(MongooseAutoIncrementID.plugin, {
-    modelName: "User",
-    field: "user",
-    incrementBy: 1,
-    startAt: 1,
-    unique: true,
-    nextCount: false,
-    resetCount: false,
-  });
-}
-
-userSchema.virtual("full_name").get(function () {
-  if (this.first_name && this.last_name) {
-    return `${this.first_name} ${this.last_name}`;
-  }
-  if (this.first_name && !this.last_name) {
-    return this.first_name;
-  }
-  if (!this.first_name && this.last_name) {
-    return this.last_name;
-  }
-  return undefined;
-});
-
-userSchema.virtual("initials").get(function () {
-  return (
-    this.first_name &&
-    this.last_name &&
-    `${this.first_name[0].concat(this.last_name[0]).toUpperCase()}`
-  );
-});
-
-userSchema.methods.validPassword = function (password) {
-  return bcrypt.compareSync(password, this.password);
+/**
+ * Compare the passed password with the value in the database. A model method.
+ *
+ * @param {string} password
+ * @returns {object} callback
+ */
+UserSchema.methods.comparePassword = function comparePassword(
+  password,
+  callback
+) {
+  bcrypt.compare(password, this.password, callback);
 };
 
-userSchema.methods.hashPassword = function () {
-  return new Promise((resolve, reject) => {
-    bcrypt.genSalt(10, (err1, salt) => {
-      if (err1) {
-        reject(err1);
+/**
+ * The pre-save hook method.
+ */
+UserSchema.pre("save", function saveHook(next) {
+  const user = this;
+
+  // proceed further only if the password is modified or the user is new
+  if (!user.isModified("password")) return next();
+
+  return bcrypt.genSalt((saltError, salt) => {
+    if (saltError) {
+      return next(saltError);
+    }
+
+    return bcrypt.hash(user.password, salt, (hashError, hash) => {
+      if (hashError) {
+        return next(hashError);
       }
-      bcrypt.hash(this.password, salt, (err2, hash) => {
-        if (err2) {
-          reject(err2);
-        }
-        this.password = hash;
-        resolve(hash);
-      });
+
+      // replace a password string with hash value
+      user.password = hash;
+
+      return next();
     });
   });
-};
+});
 
-userSchema.methods.hidePassword = function () {
-  return R.omit(["password", "__v", "_id"], this.toObject({ virtuals: true }));
-};
-
-const User = mongoose.model("User", userSchema);
-
-module.exports = User;
+module.exports = mongoose.model("User", UserSchema);

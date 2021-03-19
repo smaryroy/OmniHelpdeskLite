@@ -1,50 +1,98 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Detail from "./pages/Detail";
-import NoMatch from "./pages/NoMatch";
-import SiteBar from "./components/Sitebar";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+import { browserHistory } from "react-router";
 import Tickets from "./pages/Tickets";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import LoginPage from "./pages/LoginPage.js";
+import Auth from "./modules/Auth";
+import Sitebar from "./components/Sitebar";
+import SignUpPage from "./pages/SignUpPage.js";
+import LogoutFunction from "./pages/LogoutFunction.js";
+import NoMatch from "./pages/NoMatch";
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      Auth.isUserAuthenticated() ? (
+        <Component {...props} {...rest} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/",
+            state: { from: props.location },
+          }}
+        />
+      )
+    }
+  />
+);
+
+const LoggedOutRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      Auth.isUserAuthenticated() ? (
+        <Redirect
+          to={{
+            pathname: "/tickets",
+            state: { from: props.location },
+          }}
+        />
+      ) : (
+        <Component {...props} {...rest} />
+      )
+    }
+  />
+);
+
+const PropsRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => <Component {...props} {...rest} />} />
+);
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      sessionToken: "", //1
+      authenticated: false,
     };
   }
 
-  componentWillMount() {
-    const token = localStorage.getItem("token"); //4
-    if (token && !this.state.sessionToken) {
-      //5
-      this.setState({ sessionToken: token });
-    }
+  componentDidMount() {
+    // check if user is logged in on refresh
+    this.toggleAuthenticateStatus();
   }
-  //2
-  setSessionState = (token) => {
-    localStorage.setItem("token", token); //3
-    this.setState({ sessionToken: token });
-  };
+
+  toggleAuthenticateStatus() {
+    // check authenticated status and toggle state based on that
+    this.setState({ authenticated: Auth.isUserAuthenticated() });
+  }
 
   render() {
     return (
       <Router>
         <div>
-          <SiteBar />
+          <Sitebar data={this.state.authenticated} />
           <Switch>
             <Route exact path={["/", "/login"]}>
-              <Login setToken={this.setSessionState} />
+              <LoginPage
+                toggleAuthenticateStatus={() => this.toggleAuthenticateStatus()}
+              />
             </Route>
-            <Route exact path={["/signup"]}>
-              <Signup setToken={this.setSessionState} />
+            <Route exact path="/signup">
+              <SignUpPage />
             </Route>
-            <Route exact path={["/", "/tickets"]}>
+            <Route exact path="/tickets">
               <Tickets />
             </Route>
-            <Route exact path="/tickets/:id">
-              <Detail />
+            <Route exact path="/logout">
+              <LogoutFunction />
             </Route>
             <Route>
               <NoMatch />

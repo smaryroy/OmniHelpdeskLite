@@ -1,31 +1,29 @@
 const db = require("../models");
 
-// Defining methods for the ticketsController
+// Defining methods for the usersController
 module.exports = {
   findAll: function (req, res) {
-    db.Ticket.find(req.query)
-      .sort({ date: -1 })
+    db.User.find(req.query)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   findById: function (req, res) {
-    db.Ticket.findById(req.params.id)
+    db.User.findById(req.params.id)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   create: function (req, res) {
-    console.log("ticket create called");
-    db.Ticket.create(req.body)
+    db.User.create(req.body)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   update: function (req, res) {
-    db.Ticket.findOneAndUpdate({ _id: req.params.id }, req.body)
+    db.User.findOneAndUpdate({ _id: req.params.id }, req.body)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   remove: function (req, res) {
-    db.Ticket.findById({ _id: req.params.id })
+    db.User.findById({ _id: req.params.id })
       .then((dbModel) => dbModel.remove())
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));

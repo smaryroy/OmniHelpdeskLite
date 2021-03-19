@@ -7,6 +7,14 @@ mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/omnihelpdesklight"
 );
 
+const userSeed = [
+  {
+    email: "admin",
+    password: "admin",
+    name: "Administrator",
+  },
+];
+
 const ticketSeed = [
   {
     title: "User locked out",
@@ -22,6 +30,15 @@ const ticketSeed = [
     subCategory: "Software Issues",
   },
 ];
+db.User.remove({})
+  .then(() => db.User.collection.insertMany(userSeed))
+  .then((data) => {
+    console.log(data.result.n + " users inserted!");
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 
 db.Ticket.remove({})
   .then(() => db.Ticket.collection.insertMany(ticketSeed))
