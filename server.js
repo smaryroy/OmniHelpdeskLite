@@ -1,43 +1,44 @@
+require("dotenv").config();
 const express = require("express");
-// Requiring passport as we've configured it
-const passport = require("./config/passport");
-const mongoose = require("mongoose");
-const appRoutes = require("./routes");
+const session = require("express-session");
+const routes = require("./server/routes");
+const passport = require("passport");
+const dbConnection = require("./server/database");
+var MongoDBStore = require("connect-mongodb-session")(session);
+
 const app = express();
-const config = require("./config");
 
-const PORT = process.env.PORT || 3001;
+const port = process.env.PORT || 3001;
 
-// connect to the database and load models
-require("./models").connect("mongodb://localhost/omnihelpdesklight");
-
-// Define middleware here
-app.use(express.urlencoded({ extended: true }));
+/* Express setup */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
-//app.use(express.static('./client/dist/'));
 
-// load passport strategies
+// Add routes, both API and view
+app.use(routes);
+
+// User Routes
+const user = require("./server/routes/user");
+
+// Passport
 app.use(passport.initialize());
-const localSignupStrategy = require("./passport/local-signup");
-const localLoginStrategy = require("./passport/local-login");
-passport.use("local-signup", localSignupStrategy);
-passport.use("local-login", localLoginStrategy);
+app.use(passport.session()); // calls the deserializeUser
+app.use("/user", user);
 
-// pass the authenticaion checker middleware
-const authCheckMiddleware = require("./middleware/auth-check");
-app.use("/api", authCheckMiddleware);
-
-// routes
-
-app.use(appRoutes);
-console.log("appRoutes", appRoutes);
+// Sessions
+app.use(
+  session({
+    secret: "bootcamp", //pick a random string to make the hash that is generated secure
+    store: new MongoDBStore({ mongooseConnection: dbConnection }),
+    resave: false, //required
+    saveUninitialized: false, //required
+  })
+);
 
 // Start the API server
-app.listen(PORT, function () {
-  console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
-});
+app.listen(port, () => console.log("Server started on port", port));

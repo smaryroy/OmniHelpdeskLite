@@ -1,4 +1,5 @@
 import React from "react";
+import { FaBeer } from "react-icons/fa";
 import "./style.css";
 
 // The ...props means, spread all of the passed props onto this element
@@ -6,7 +7,7 @@ import "./style.css";
 function DeleteBtn(props) {
   return (
     <span className="delete-btn" {...props} role="button" tabIndex="0">
-      ✗
+      <FaBeer />
     </span>
   );
 }

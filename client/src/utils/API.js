@@ -1,37 +1,30 @@
 import axios from "axios";
 
 export default {
+  //save new user
+  // addUser: function (userData) {
+  //   console.log("in adduser");
+  //   return axios.post("/api/signup", userData);
+  // },
+  // validateUser: function (userData) {
+  //   console.log("in validateUser");
+  //   return axios.post("/api/login", userData);
+  // },
   // Gets all tickets
   getTickets: function () {
-    return axios.get("/tickets");
+    console.log("in api.js");
+    return axios.get("/api/tickets");
   },
   // Gets the ticket with the given id
   getTicket: function (id) {
-    return axios.get("/ticket/" + id);
+    return axios.get("/api/tickets/" + id);
   },
   // Deletes the ticket with the given id
   deleteTicket: function (id) {
-    return axios.delete("/ticket/" + id);
+    return axios.delete("/api/tickets/" + id);
   },
   // Saves a ticket to the database
   saveBook: function (ticketData) {
-    return axios.post("/tickets", ticketData);
-  },
-
-  // Gets all user
-  getUsers: function () {
-    return axios.get("/users");
-  },
-  // Gets the user with the given id
-  getUser: function (id) {
-    return axios.get("/user/" + id);
-  },
-  // Deletes the user with the given id
-  deleteUser: function (id) {
-    return axios.delete("/user/" + id);
-  },
-  // Saves a user to the database
-  saveUser: function (userData) {
-    return axios.post("/users", userData);
+    return axios.post("/api/tickets", ticketData);
   },
 };
