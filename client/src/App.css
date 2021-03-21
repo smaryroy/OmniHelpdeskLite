@@ -81,6 +81,10 @@ a {
 .myform {
   background-color: white;
 }
+.myDropdown {
+  height: 50px;
+  width: 100%;
+}
 .card {
   border-style: solid;
   border-color: #00aeef;
@@ -104,6 +108,13 @@ a {
 .dropdown-toggle {
   background-color: #453ea3;
   color: #ffde17;
+  font-size: small;
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+}
+.dropdown-menu {
+  font-size: smaller;
 }
 .aln-left {
   text-align: left;

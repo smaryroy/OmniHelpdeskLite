@@ -36,8 +36,8 @@ function TicketPage() {
     <Container className="main-c">
       <Row>
         <Col sm={3} className="catMenu">
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown className="myDropdown">
+            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
               Sort By
             </Dropdown.Toggle>
 

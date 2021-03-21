@@ -7,8 +7,8 @@ const authController = require("../controllers/authController");
 // API Routes
 router.use("/api", apiRoutes);
 
-// authentication routes
-router.get("/", authController.getCurrentUser);
+// authentication routes);
+router.get("/user", authController.getCurrentUser);
 router.post(
   "/signup",
   authController.checkAlreadyRegistered,

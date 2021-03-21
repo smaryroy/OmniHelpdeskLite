@@ -11,7 +11,6 @@ class App extends Component {
   state = {
     isLoggedIn: false,
     username: null,
-    password: null,
   };
 
   componentDidMount() {
@@ -24,7 +23,7 @@ class App extends Component {
 
   getUser = () => {
     console.log("in getUser");
-    axios.get("/").then((response) => {
+    axios.get("/user").then((response) => {
       if (response.data.user) {
         this.setState({
           isLoggedIn: true,
