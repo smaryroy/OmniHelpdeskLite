@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Switch, Route, withRouter } from "react-router-dom";
-import TicketPage from "./pages/TicketPage";
+import TicketPage from "./components/TicketPage";
 import Navbar from "./components/navbar";
 import LoginForm from "./components/LoginPage";
 import Signup from "./components/SignUpPage";
