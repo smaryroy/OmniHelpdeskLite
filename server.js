@@ -1,13 +1,6 @@
-require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
-const routes = require("./server/routes");
-const passport = require("passport");
-const dbConnection = require("./server/database");
-var MongoDBStore = require("connect-mongodb-session")(session);
-
 const app = express();
-
 const port = process.env.PORT || 3001;
 
 /* Express setup */
@@ -20,25 +13,26 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Add routes, both API and view
+const routes = require("./server/routes");
 app.use(routes);
 
-// User Routes
-const user = require("./server/routes/user");
-
-// Passport
-app.use(passport.initialize());
-app.use(passport.session()); // calls the deserializeUser
-app.use("/user", user);
+const db = require("./server/models");
 
 // Sessions
+const MongoStore = require("connect-mongodb-session")(session);
 app.use(
   session({
-    secret: "bootcamp", //pick a random string to make the hash that is generated secure
-    store: new MongoDBStore({ mongooseConnection: dbConnection }),
+    secret: "hownowbrowncow", //pick a random string to make the hash that is generated secure
+    store: new MongoStore({ mongooseConnection: db.Connection }),
     resave: false, //required
     saveUninitialized: false, //required
   })
 );
+
+// Passport
+const passport = require("./server/passport");
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Start the API server
 app.listen(port, () => console.log("Server started on port", port));

@@ -5,11 +5,29 @@ mongoose.promise = Promise;
 
 // Define userSchema
 const userSchema = new Schema({
-  username: { type: String, unique: false, required: false },
-  password: { type: String, unique: false, required: false },
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: "Username is Required",
+  },
+  password: {
+    type: String,
+    trim: true,
+    required: "Password is Required",
+    validate: [
+      function (input) {
+        return input.length >= 6;
+      },
+      "Password must be more than 5 characters.",
+    ],
+  },
+  userCreated: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// Define schema methods
 userSchema.methods = {
   checkPassword: function (inputPassword) {
     return bcrypt.compareSync(inputPassword, this.password);

@@ -1,4 +1,4 @@
-const Ticket = require("../database/models/ticket");
+const Ticket = require("../models/ticket");
 
 // Defining methods for the ticketsController
 module.exports = {

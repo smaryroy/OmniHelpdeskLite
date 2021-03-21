@@ -1,145 +1,161 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import TicketPage from "./pages/TicketPage";
 import Navbar from "./components/navbar";
 import LoginForm from "./components/LoginPage";
 import Signup from "./components/SignUpPage";
+import "./App.css";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      loggedIn: false,
-      username: null,
-    };
+  state = {
+    isLoggedIn: false,
+    username: null,
+    password: null,
+  };
 
-    this.getUser = this.getUser.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-  }
   componentDidMount() {
     this.getUser();
   }
 
-  updateUser(userObject) {
-    this.setState(userObject);
-  }
+  updateUser = (updatedProp, update) => {
+    this.setState((prevState) => ({ ...prevState, [updatedProp]: update }));
+  };
 
-  getUser() {
-    axios.get("/user/").then((response) => {
-      console.log("Get user response: ");
-      console.log(response.data);
+  getUser = () => {
+    console.log("in getUser");
+    axios.get("/").then((response) => {
       if (response.data.user) {
-        console.log("Get User: There is a user saved in the server session: ");
-
         this.setState({
-          loggedIn: true,
+          isLoggedIn: true,
           username: response.data.user.username,
         });
       } else {
-        console.log("Get user: no user");
         this.setState({
-          loggedIn: false,
+          isLoggedIn: false,
           username: null,
         });
       }
     });
-  }
+  };
+
+  register = async () => {
+    const { username, password } = this.state;
+    axios
+      .post("/signup", { username, password })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            isLoggedIn: true,
+            username: username,
+          });
+          this.props.history.push("/login");
+        }
+      })
+      .catch((error) => {
+        console.log("register error", error);
+      });
+  };
+
+  login = async () => {
+    const { username, password } = this.state;
+    console.log("in app login");
+    axios
+      .post("/login", { username, password })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          this.setState({
+            isLoggedIn: true,
+            username: username,
+          });
+          this.props.history.push("/tickets");
+        }
+      })
+      .catch((error) => {
+        console.log("login error", error);
+      });
+  };
+
+  logout = () => {
+    axios
+      .post("/logout")
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            isLoggedIn: false,
+            username: null,
+            password: null,
+          });
+          this.props.history.push("/login");
+        }
+      })
+      .catch((error) => {
+        console.log("logout error", error);
+      });
+  };
 
   render() {
+    console.log("state", this.state);
     return (
       <div className="App">
-        <Navbar updateUser={this.updateUser} loggedIn={this.state.loggedIn} />
-        {/* greet user if logged in: */}
-        {this.state.loggedIn && <p>Join the party, {this.state.username}!</p>}
-        {/* Routes to different components */}
-        <Route exact path="/" component={TicketPage} />
-        <Route
-          path="/login"
-          render={() => <LoginForm updateUser={this.updateUser} />}
-        />
-        <Route path="/signup" render={() => <Signup />} />
+        <Navbar isLoggedIn={this.state.isLoggedIn} logout={this.logout} />
+        <Switch>
+          <Route
+            exact
+            path="/tickets"
+            render={() => (
+              <TicketPage
+                isLoggedIn={this.state.isLoggedIn}
+                username={this.state.username}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/"
+            render={() => (
+              <LoginForm
+                username={this.state.username}
+                updateUser={this.updateUser}
+                login={this.login}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/login"
+            render={() => (
+              <LoginForm
+                username={this.state.username}
+                updateUser={this.updateUser}
+                login={this.login}
+              />
+            )}
+          />
+          <Route
+            path="/signup"
+            render={() => (
+              <Signup
+                username={this.state.username}
+                updateUser={this.updateUser}
+                register={this.register}
+              />
+            )}
+          />
+          {/* <Route
+            path="/page"
+            render={() => (
+              <Page
+                isLoggedIn={this.state.isLoggedIn}
+                username={this.state.username}
+              />
+            )}
+          /> */}
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
-// }
-// const PrivateRoute = ({ component: Component, allowedRoles, ...rest }) => {
-//   const userData = Session.getUserData();
-//   const isLoggedIn = !!userData;
-//   const role = userData ? userData.role : null;
-
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) =>
-//         isLoggedIn ? (
-//           allowedRoles.indexOf(role) > -1 ? (
-//             <Component {...props} />
-//           ) : (
-//             <Redirect to="/" />
-//           )
-//         ) : (
-//           <Redirect to="/login" />
-//         )
-//       }
-//     />
-//   );
-// };
-
-// ReactDOM.render(
-//   <Router history={history}>
-//     <Switch>
-//       <Route path="/" exact component={TicketPage} />
-//       <Route path="/tickets" exact component={TicketPage} />
-//       <Route path="/login" exact component={LoginPage} />
-//       <Route path="/signup" exact component={SignUpPage} />
-//       <PrivateRoute
-//         path="/admin"
-//         exact
-//         component={AdminPage}
-//         allowedRoles={[ROLES.ADMIN]}
-//       />
-//       <PrivateRoute
-//         path="/user"
-//         exact
-//         component={AdminPage}
-//         allowedRoles={[ROLES.USER, ROLES.ADMIN]}
-//       />
-//     </Switch>
-//   </Router>,
-//   document.getElementById("root")
-// );
-
-// <div>
-// <Sitebar data={this.state.authenticated} />
-// <Switch>
-//   <PropsRoute
-//     exact
-//     path="/"
-//     component={Tickets}
-//     toggleAuthenticateStatus={() => this.toggleAuthenticateStatus()}
-//   />
-//   <LoggedOutRoute
-//     path="/login"
-//     component={LoginPage}
-//     toggleAuthenticateStatus={() => this.toggleAuthenticateStatus()}
-//   />
-
-//   <Route exact path="/signup">
-//     <SignUpPage />
-//   </Route>
-//   <Route exact path="/tickets">
-//     <Tickets />
-//   </Route>
-//   <Route exact path="/logout">
-//     <LogoutFunction />
-//   </Route>
-//   <Route>
-//     <NoMatch />
-//   </Route>
-// </Switch>
-// </div>
+export default withRouter(App);

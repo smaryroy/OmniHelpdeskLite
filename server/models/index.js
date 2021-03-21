@@ -2,11 +2,10 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-//your local database url
-//27017 is the default mongoDB port
-const uri = "mongodb://localhost/omnihelpdesklight";
+var MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost/omnihelpdesklight";
 
-mongoose.connect(uri).then(
+mongoose.connect(MONGODB_URI).then(
   () => {
     /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
     console.log("Connected to Mongo");
@@ -18,4 +17,7 @@ mongoose.connect(uri).then(
   }
 );
 
-module.exports = mongoose.connection;
+module.exports = {
+  Ticket: require("./ticket"),
+  Connection: mongoose.connection,
+};

@@ -9,7 +9,7 @@ mongoose.connect(
 
 const userSeed = [
   {
-    email: "admin",
+    email: "admin@test.com",
     password: "admin",
     name: "Administrator",
   },

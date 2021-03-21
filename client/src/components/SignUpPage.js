@@ -1,54 +1,35 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 class SignUpPage extends Component {
   constructor() {
     super();
     this.state = {
-      username: "",
-      password: "",
-      confirmPassword: "",
+      redirect: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-  handleSubmit(event) {
-    console.log("sign-up handleSubmit, username: ");
-    console.log(this.state.username);
-    event.preventDefault();
 
-    //request to server to add a new username/password
-    axios
-      .post("/user/", {
-        username: this.state.username,
-        password: this.state.password,
-      })
-      .then((response) => {
-        console.log(response);
-        if (!response.data.errmsg) {
-          console.log("successful signup");
-          this.setState({
-            //redirect to login page
-            redirectTo: "/login",
-          });
-        } else {
-          console.log("username already taken");
-        }
-      })
-      .catch((error) => {
-        console.log("signup error: ");
-        console.log(error);
-      });
-  }
+  handleChange = (event) => {
+    this.props.updateUser(event.target.name, event.target.value);
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.props.register();
+    this.setState({
+      //redirect to login page
+      redirect: true,
+    });
+  };
 
   render() {
+    //if (this.state.redirect) {
+    // return <Redirect push to="/login" />;
+    //} else {
     return (
-      <div className="SignupForm">
+      <div className="myform">
         <h4>Sign up</h4>
         <form className="form-horizontal">
           <div className="form-group">
@@ -64,7 +45,6 @@ class SignUpPage extends Component {
                 id="username"
                 name="username"
                 placeholder="Username"
-                value={this.state.username}
                 onChange={this.handleChange}
               />
             </div>
@@ -81,7 +61,6 @@ class SignUpPage extends Component {
                 placeholder="password"
                 type="password"
                 name="password"
-                value={this.state.password}
                 onChange={this.handleChange}
               />
             </div>
@@ -97,8 +76,10 @@ class SignUpPage extends Component {
             </button>
           </div>
         </form>
+        {/* {this.state.redirect ? <Redirect push to="/login" /> : null} */}
       </div>
     );
+    //}
   }
 }
 

@@ -20,12 +20,10 @@ export function Sitebar(props) {
         <NavbarBrand href="/">
           <img src={logo} alt="OmniHelpdeskLite Logo" />
         </NavbarBrand>
-        {/* <NavbarToggler onClick={this.toggle} />
-        <Collapse isOpen={this.state.isOpen} navbar> */}
         <Nav className="ml-auto" navbar>
           <NavItem>
             <div>
-              {props.authenticated ? (
+              {this.props.isLoggedIn ? (
                 <div>
                   <Link to="/logout" className="btn btn-primary">
                     Logout
@@ -41,7 +39,6 @@ export function Sitebar(props) {
             </div>
           </NavItem>
         </Nav>
-        {/* </Collapse> */}
       </Navbar>
     </div>
   );
