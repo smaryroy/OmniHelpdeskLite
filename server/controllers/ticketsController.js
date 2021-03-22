@@ -31,17 +31,16 @@ module.exports = {
       .catch((err) => res.status(422).json(err));
   },
   findByCategory: function (req, res) {
-    console.log("findByCategory", req.query);
-    //let q = { category: "Software" };
-    Ticket.find({ category: req.params.cat })
+    console.log("findByCategory", req.params);
+    Ticket.find({ category: req.params.id })
       //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   findByCategorySub: function (req, res) {
-    console.log("findByCategorySub", req.query);
+    console.log("findByCategorySub", req.params);
     //let q = { category: "Software" };
-    Ticket.find({ category: req.params.cat, subcategory: req.params.sub })
+    Ticket.find({ category: req.params.id, subCategory: req.params.sub })
       //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));

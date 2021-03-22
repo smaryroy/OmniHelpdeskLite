@@ -13,7 +13,7 @@ router
 
 router.route("/category/:id").get(ticketsController.findByCategory);
 router
-  .route("/category/:id/subcategory/:id")
+  .route("/category/:id/subcategory/:sub")
   .get(ticketsController.findByCategorySub);
 
 module.exports = router;

@@ -26,13 +26,15 @@ export default {
     console.log("in api.js");
     return axios.get("/api/tickets");
   },
-  getByCategory: function (cat) {
-    console.log("in getByCategory", cat);
-    return axios.get("/api/tickets/category/" + cat);
+  getByCategory: function (id) {
+    console.log("in getByCategory", id);
+    return axios.get("/api/tickets/category/" + id);
   },
-  getByCategorySub: function (cat, sub) {
-    console.log("in getByCategorySub", cat, sub);
-    return axios.get("/api/tickets/category/" + cat + "/subcategory/" + sub);
+  getByCategorySub: function (id, sub) {
+    console.log("in getByCategorySub", id, sub);
+    return axios.get("/api/tickets/category/" + id + "/subcategory/" + sub, {
+      params: { cat: id, sub: sub },
+    });
   },
   // Gets the ticket with the given id
   getTicket: function (id) {

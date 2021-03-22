@@ -51,6 +51,7 @@ class TicketPage extends React.Component {
   handleSearchChange(cat, sub, e) {
     e.preventDefault();
     this.setState({ searchValue: cat + ";" + sub });
+    this.queryTickets(cat, sub);
   }
 
   // Loads all tickets and sets them to tickets
@@ -63,8 +64,9 @@ class TicketPage extends React.Component {
 
   queryTickets(cat, sub) {
     console.log("queryTickets", cat, sub);
+    const id = cat;
     if (!sub) {
-      API.getByCategory(cat)
+      API.getByCategory(id)
         .then((res) => this.setState({ tickets: res.data }))
         .catch((err) => console.log(err));
     } else {
