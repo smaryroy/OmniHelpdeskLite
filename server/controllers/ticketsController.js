@@ -3,7 +3,8 @@ const Ticket = require("../models/ticket");
 // Defining methods for the ticketsController
 module.exports = {
   findAll: function (req, res) {
-    Ticket.find({})
+    Ticket.find(req.query)
+      //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
@@ -26,6 +27,22 @@ module.exports = {
   remove: function (req, res) {
     Ticket.findById({ _id: req.params.id })
       .then((dbModel) => dbModel.remove())
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
+  },
+  findByCategory: function (req, res) {
+    console.log("findByCategory", req.query);
+    //let q = { category: "Software" };
+    Ticket.find({ category: req.params.cat })
+      //  .sort(req.sort)
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
+  },
+  findByCategorySub: function (req, res) {
+    console.log("findByCategorySub", req.query);
+    //let q = { category: "Software" };
+    Ticket.find({ category: req.params.cat, subcategory: req.params.sub })
+      //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },

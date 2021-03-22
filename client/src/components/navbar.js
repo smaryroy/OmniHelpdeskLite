@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../assets/img/omnihelp_bnr300px.png";
 import "../App.css";
 
@@ -21,9 +21,6 @@ class Navbar extends Component {
             </section>
           ) : (
             <section className="navbar-section">
-              <Link to="/" className="btn btn-link text-secondary">
-                <span className=" blue-text">Home</span>
-              </Link>
               <Link to="/login" className="btn btn-link text-secondary">
                 <span className="blue-text">Log In</span>
               </Link>

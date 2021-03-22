@@ -11,4 +11,9 @@ router
   .put(ticketsController.update)
   .delete(ticketsController.remove);
 
+router.route("/category/:id").get(ticketsController.findByCategory);
+router
+  .route("/category/:id/subcategory/:id")
+  .get(ticketsController.findByCategorySub);
+
 module.exports = router;
