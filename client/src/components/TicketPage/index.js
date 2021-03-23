@@ -1,12 +1,13 @@
 import React from "react";
-import API from "../utils/API";
+import API from "../../utils/API";
 import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ListGroup from "react-bootstrap/ListGroup";
 import Card from "react-bootstrap/Card";
-import "../App.css";
+import Button from "react-bootstrap/Button";
+import "./style.css";
 
 class TicketPage extends React.Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class TicketPage extends React.Component {
 
   render() {
     return (
-      <Container fluid className="main-c">
+      <Container fluid>
         <Row>
           <Col sm={3} className="catMenu">
             <h6 className="sub-header">Categories</h6>
@@ -169,7 +170,12 @@ class TicketPage extends React.Component {
               <Col sm={3}>
                 <h4 className="sub-header">Tickets</h4>
               </Col>
-              <Col style={{ justifyContent: "flex-end" }}>
+              <Col className="just-right">
+                <Button variant="primary">
+                  <Link className="return-link" to="/newticket">
+                    Open New Ticket
+                  </Link>
+                </Button>
                 {/* <div className="dropdown">
                   <button className="dropbtn">Sort By</button>
                   <div className="dropdown-content">

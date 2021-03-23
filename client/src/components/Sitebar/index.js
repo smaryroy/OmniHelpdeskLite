@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/img/omnihelp_bnr300px.png";
-import "../App.css";
+import logo from "../../assets/img/omnihelp_bnr300px.png";
 
 class Navbar extends Component {
   render() {

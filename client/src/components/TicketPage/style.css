@@ -1,0 +1,60 @@
+.catMenu {
+  font-size: small;
+  line-height: 1;
+  text-align: left;
+}
+
+.sub-header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+}
+
+.catItem {
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.scroll-div {
+  overflow-y: scroll;
+}
+
+.ticket-list {
+  width: 100%;
+  height: 400px;
+}
+
+.mycard {
+  text-align: left;
+  padding: 3px;
+  font-size: 0.7em;
+}
+.mycard-title {
+  font-size: 1.3em;
+}
+.mycard-text {
+  font-size: 1em;
+}
+.mycard-item {
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.just-right {
+  justify-content: right;
+  text-align: right;
+}
+
+.btn-primary {
+  color: #262262;
+  background-color: #ffde17;
+  border-color: #ffde17;
+}

@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const ticketsController = require("../../controllers/ticketsController");
 
-router.route("/").get(ticketsController.findAll);
-router.route("/").post(ticketsController.create);
+router.route("/").get(ticketsController.findAll).post(ticketsController.create);
 
 // Matches with "/api/books/:id"
 router

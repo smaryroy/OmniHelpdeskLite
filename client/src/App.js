@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Switch, Route, withRouter } from "react-router-dom";
 import TicketPage from "./components/TicketPage";
-import Navbar from "./components/navbar";
+import Sitebar from "./components/Sitebar";
 import LoginPage from "./components/LoginPage";
-import Signup from "./components/SignUpPage";
+import Signup from "./components/SignupPage";
 import TicketEdit from "./components/TicketEdit";
 import "./App.css";
 
@@ -72,7 +72,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar isLoggedIn={this.state.isLoggedIn} logout={this.logout} />
+        <Sitebar isLoggedIn={this.state.isLoggedIn} logout={this.logout} />
         <Switch>
           <Route
             exact
@@ -90,6 +90,16 @@ class App extends Component {
           <Route
             exact
             path="/tickets/:id"
+            render={() => (
+              <TicketEdit
+                isLoggedIn={this.state.isLoggedIn}
+                gotoLogin={this.gotoLogin}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/newticket"
             render={() => (
               <TicketEdit
                 isLoggedIn={this.state.isLoggedIn}
