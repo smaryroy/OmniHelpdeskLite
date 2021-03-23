@@ -12,7 +12,7 @@ class Navbar extends Component {
               <Link
                 to="#"
                 className="btn btn-link text-secondary"
-                onClick={() => this.props.logout}
+                onClick={() => this.props.logout()}
               >
                 <span className="blue-text">Log Out</span>
               </Link>

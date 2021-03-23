@@ -35,7 +35,8 @@ class SignUpPage extends Component {
         if (response.status === 200) {
           console.log("reg success");
           this.setState({ message: "" });
-          this.props.gotoLogin();
+          this.props.updateUser("isLoggedIn", "true");
+          this.props.gotoMain();
         }
       })
       .catch((error) => {

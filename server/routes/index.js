@@ -21,7 +21,8 @@ router.post(
   "/auth/signup",
   authController.checkAlreadyRegistered,
   authController.registerUser,
-  passport.authenticate("local")
+  passport.authenticate("local"),
+  authController.login
 );
 
 router.post(

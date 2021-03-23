@@ -43,10 +43,12 @@ class App extends Component {
   };
 
   gotoMain = () => {
+    console.log("in gotomain", this.state);
     this.props.history.push("/tickets");
   };
 
   gotoLogin = () => {
+    console.log("in gotoLogin", this.state);
     this.props.history.push("/login");
   };
 
@@ -134,7 +136,7 @@ class App extends Component {
               <Signup
                 username={this.state.username}
                 updateUser={this.updateUser}
-                gotoLogin={this.gotoLogin}
+                gotoMain={this.gotoMain}
               />
             )}
           />
