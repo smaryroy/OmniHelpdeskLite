@@ -9,22 +9,30 @@ router.use("/api", apiRoutes);
 
 // authentication routes);
 router.get("/user", authController.getCurrentUser);
+// router.post(
+//   "/auth/signup",
+//   authController.checkAlreadyRegistered,
+//   authController.registerUser,
+//   passport.authenticate("local"),
+//   authController.login
+// );
+
 router.post(
-  "/signup",
+  "/auth/signup",
   authController.checkAlreadyRegistered,
   authController.registerUser,
-  passport.authenticate("local"),
-  authController.login
+  passport.authenticate("local")
 );
+
 router.post(
-  "/login",
+  "/auth/login",
   authController.checkAlreadyRegistered,
   authController.registerUser,
   passport.authenticate("local"),
   authController.login
 );
 
-router.post("/logout", authController.logout);
+router.post("/auth/logout", authController.logout);
 
 // If no API routes are hit, send the React app
 router.use((req, res) => {

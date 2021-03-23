@@ -16,4 +16,5 @@ router
   .route("/category/:id/subcategory/:sub")
   .get(ticketsController.findByCategorySub);
 
+router.route("/status/:id").get(ticketsController.findByStatus);
 module.exports = router;

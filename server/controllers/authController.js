@@ -1,7 +1,6 @@
 const User = require("../models/user");
 
 exports.getCurrentUser = (req, res) => {
-  console.log("current user: ", req.user);
   if (req.user) {
     res.json({ user: req.user });
   } else {
@@ -10,6 +9,7 @@ exports.getCurrentUser = (req, res) => {
 };
 
 exports.checkAlreadyRegistered = async (req, res, next) => {
+  console.log("see if registered");
   const { username } = req.body;
   const registered = await User.find({ username });
   if (registered[0] && registered[0]._id) {
@@ -20,11 +20,12 @@ exports.checkAlreadyRegistered = async (req, res, next) => {
 };
 
 exports.registerUser = async (req, res, next) => {
-  console.log("in user registration", req.body);
+  console.log("in user registration");
   const { username, password } = req.body;
-  await new User({ username, password })
-    .save()
-    .catch((err) => console.log(err));
+  await new User({ username, password }).save().catch((err) => {
+    console.log("register error: ", err);
+    res.json({ error: "Unable to register user." });
+  });
   next();
 };
 

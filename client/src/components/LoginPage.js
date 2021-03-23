@@ -2,25 +2,48 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import AppButton from "./AppButton";
+import axios from "axios";
 
 class LoginForm extends Component {
   constructor() {
     super();
-
+    this.state = {
+      username: "",
+      password: "",
+      message: "",
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = (event) => {
-    this.props.updateUser(event.target.name, event.target.value);
+  handleChange = (e) => {
+    this.props.updateUser(e.target.name, e.target.value);
+    const state = this.state;
+    state[e.target.name] = e.target.value;
+    this.setState(state);
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.login();
+    const { username, password } = this.state;
+    axios
+      .post("/auth/login", { username, password })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({ message: "" });
+          this.props.updateUser("isLoggedIn", "true");
+          this.props.gotoMain();
+        }
+      })
+      .catch((error) => {
+        console.log("login error", error);
+        this.setState({ message: "Login failed: " + error });
+      });
   };
 
   render() {
+    const { username, password, message } = this.state;
     return (
       <Container className="myform">
         <Row>
@@ -28,7 +51,12 @@ class LoginForm extends Component {
           <Col md={6}>
             <h4>Login</h4>
 
-            <form>
+            <form onSubmit={this.handleSubmit}>
+              {message !== "" && (
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                  {message}
+                </div>
+              )}
               <div className="form-group">
                 <div className="col-1 col-ml-auto">
                   <label className="form-label" htmlFor="username">
@@ -41,6 +69,7 @@ class LoginForm extends Component {
                     type="text"
                     id="username"
                     name="username"
+                    value={username}
                     placeholder="username"
                     onChange={this.handleChange}
                   />
@@ -58,18 +87,13 @@ class LoginForm extends Component {
                     placeholder="password"
                     type="password"
                     name="password"
+                    value={password}
                     onChange={this.handleChange}
                   />
                 </div>
               </div>
               <div className="form-group ">
-                <button
-                  className="btn subBtn "
-                  onClick={this.handleSubmit}
-                  type="submit"
-                >
-                  Login
-                </button>
+                <AppButton btnType="submit" label="Login"></AppButton>
               </div>
             </form>
           </Col>

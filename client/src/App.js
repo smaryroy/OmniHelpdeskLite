@@ -3,14 +3,17 @@ import axios from "axios";
 import { Switch, Route, withRouter } from "react-router-dom";
 import TicketPage from "./components/TicketPage";
 import Navbar from "./components/navbar";
-import LoginForm from "./components/LoginPage";
+import LoginPage from "./components/LoginPage";
 import Signup from "./components/SignUpPage";
+import TicketEdit from "./components/TicketEdit";
 import "./App.css";
 
 class App extends Component {
   state = {
     isLoggedIn: false,
     username: null,
+    password: null,
+    ticketId: null,
   };
 
   componentDidMount() {
@@ -21,6 +24,12 @@ class App extends Component {
     this.setState((prevState) => ({ ...prevState, [updatedProp]: update }));
   };
 
+  updateTicketId = (updatedProp, update) => {
+    console.log("updateticketid", updatedProp, update);
+    this.setState((prevState) => ({ ...prevState, [updatedProp]: update }));
+    console.log(this.state.ticketId);
+  };
+
   getUser = () => {
     console.log("in getUser");
     axios.get("/user").then((response) => {
@@ -29,56 +38,22 @@ class App extends Component {
           isLoggedIn: true,
           username: response.data.user.username,
         });
-      } else {
-        this.setState({
-          isLoggedIn: false,
-          username: null,
-        });
       }
     });
   };
 
-  register = async () => {
-    const { username, password } = this.state;
-    axios
-      .post("/signup", { username, password })
-      .then((response) => {
-        if (response.status === 200) {
-          this.setState({
-            isLoggedIn: true,
-            username: username,
-          });
-          this.props.history.push("/login");
-        }
-      })
-      .catch((error) => {
-        console.log("register error", error);
-      });
+  gotoMain = () => {
+    this.props.history.push("/tickets");
   };
 
-  login = async () => {
-    const { username, password } = this.state;
-    console.log("in app login");
-    axios
-      .post("/login", { username, password })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          this.setState({
-            isLoggedIn: true,
-            username: username,
-          });
-          this.props.history.push("/tickets");
-        }
-      })
-      .catch((error) => {
-        console.log("login error", error);
-      });
+  gotoLogin = () => {
+    this.props.history.push("/login");
   };
 
   logout = () => {
+    console.log("in logout");
     axios
-      .post("/logout")
+      .post("/auth/logout")
       .then((response) => {
         if (response.status === 200) {
           this.setState({
@@ -86,16 +61,15 @@ class App extends Component {
             username: null,
             password: null,
           });
-          this.props.history.push("/login");
         }
       })
       .catch((error) => {
         console.log("logout error", error);
       });
+    this.props.history.push("/login");
   };
 
   render() {
-    console.log("state", this.state);
     return (
       <div className="App">
         <Navbar isLoggedIn={this.state.isLoggedIn} logout={this.logout} />
@@ -107,6 +81,19 @@ class App extends Component {
               <TicketPage
                 isLoggedIn={this.state.isLoggedIn}
                 username={this.state.username}
+                gotoLogin={this.gotoLogin}
+                openDetail={this.openDetail}
+                updateTicketId={this.updateTicketId}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/tickets/:id"
+            render={() => (
+              <TicketEdit
+                isLoggedIn={this.state.isLoggedIn}
+                gotoLogin={this.gotoLogin}
               />
             )}
           />
@@ -114,10 +101,9 @@ class App extends Component {
             exact
             path="/"
             render={() => (
-              <LoginForm
-                username={this.state.username}
+              <LoginPage
                 updateUser={this.updateUser}
-                login={this.login}
+                gotoMain={this.gotoMain}
               />
             )}
           />
@@ -125,10 +111,10 @@ class App extends Component {
             exact
             path="/login"
             render={() => (
-              <LoginForm
+              <LoginPage
                 username={this.state.username}
                 updateUser={this.updateUser}
-                login={this.login}
+                gotoMain={this.gotoMain}
               />
             )}
           />
@@ -138,7 +124,7 @@ class App extends Component {
               <Signup
                 username={this.state.username}
                 updateUser={this.updateUser}
-                register={this.register}
+                gotoLogin={this.gotoLogin}
               />
             )}
           />

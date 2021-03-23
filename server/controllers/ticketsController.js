@@ -45,4 +45,10 @@ module.exports = {
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
+  findByStatus: function (req, res) {
+    Ticket.find({ status: req.params.id })
+      //  .sort(req.sort)
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => res.status(422).json(err));
+  },
 };
