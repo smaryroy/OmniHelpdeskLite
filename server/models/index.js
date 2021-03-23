@@ -1,9 +1,9 @@
 //Connect to Mongo database
+require("dotenv").config();
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-var MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost/omnihelpdesklight";
+var MONGODB_URI = process.env.MONGODB_URI || process.env.DBURL;
 
 mongoose.connect(MONGODB_URI).then(
   () => {
