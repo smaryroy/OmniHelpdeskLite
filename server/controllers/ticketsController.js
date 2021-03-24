@@ -14,7 +14,7 @@ module.exports = {
       .catch((err) => res.status(422).json(err));
   },
   create: function (req, res) {
-    console.log("ticket create called", req.body);
+    //console.log("ticket create called", req.body);
     Ticket.create(req.body)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => {
@@ -23,28 +23,27 @@ module.exports = {
       });
   },
   update: function (req, res) {
-    console.log("ticket update called");
+    //console.log("ticket update called");
     Ticket.findOneAndUpdate({ _id: req.params.id }, req.body)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   remove: function (req, res) {
-    console.log("ticket remove called");
+    //console.log("ticket remove called");
     Ticket.findById({ _id: req.params.id })
       .then((dbModel) => dbModel.remove())
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   findByCategory: function (req, res) {
-    console.log("findByCategory", req.params);
+    //console.log("findByCategory", req.params);
     Ticket.find({ category: req.params.id })
       //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))
       .catch((err) => res.status(422).json(err));
   },
   findByCategorySub: function (req, res) {
-    console.log("findByCategorySub", req.params);
-    //let q = { category: "Software" };
+    //console.log("findByCategorySub", req.params);
     Ticket.find({ category: req.params.id, subCategory: req.params.sub })
       //  .sort(req.sort)
       .then((dbModel) => res.json(dbModel))

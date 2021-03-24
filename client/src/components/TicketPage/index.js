@@ -34,9 +34,11 @@ class TicketPage extends React.Component {
 
   // Loads all tickets and sets them to tickets
   loadTickets() {
-    console.log("loadTickets", this.state.searchValue);
+    //console.log("loadTickets", this.state.searchValue);
     API.getTickets()
-      .then((res) => this.setState({ tickets: res.data }))
+      .then((res) => {
+        this.setState({ tickets: Array.from(res.data) });
+      })
       .catch((err) => console.log(err));
   }
 
@@ -47,7 +49,7 @@ class TicketPage extends React.Component {
   }
 
   queryTickets(cat, sub) {
-    console.log("queryTickets", cat, sub);
+    //console.log("queryTickets", cat, sub);
     const id = cat;
     if (!sub) {
       API.getByCategory(id)

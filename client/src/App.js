@@ -25,13 +25,13 @@ class App extends Component {
   };
 
   updateTicketId = (updatedProp, update) => {
-    console.log("updateticketid", updatedProp, update);
+    //console.log("updateticketid", updatedProp, update);
     this.setState((prevState) => ({ ...prevState, [updatedProp]: update }));
-    console.log(this.state.ticketId);
+    //console.log(this.state.ticketId);
   };
 
   getUser = () => {
-    console.log("in getUser");
+    //console.log("in getUser");
     axios.get("/user").then((response) => {
       if (response.data.user) {
         this.setState({
@@ -43,17 +43,17 @@ class App extends Component {
   };
 
   gotoMain = () => {
-    console.log("in gotomain", this.state);
+    //console.log("in gotomain", this.state);
     this.props.history.push("/tickets");
   };
 
   gotoLogin = () => {
-    console.log("in gotoLogin", this.state);
+    //console.log("in gotoLogin", this.state);
     this.props.history.push("/login");
   };
 
   logout = () => {
-    console.log("in logout");
+    //console.log("in logout");
     axios
       .post("/auth/logout")
       .then((response) => {

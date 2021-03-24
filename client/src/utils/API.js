@@ -3,18 +3,18 @@ import axios from "axios";
 export default {
   // Gets all tickets
   getTickets: function () {
-    console.log("in api.js");
+    // console.log("in api.js");
     return axios.get("/api/tickets");
   },
   getByStatus: function (id) {
     return axios.get("/api/tickets/status/" + id);
   },
   getByCategory: function (id) {
-    console.log("in getByCategory", id);
+    //console.log("in getByCategory", id);
     return axios.get("/api/tickets/category/" + id);
   },
   getByCategorySub: function (id, sub) {
-    console.log("in getByCategorySub", id, sub);
+    // console.log("in getByCategorySub", id, sub);
     return axios.get("/api/tickets/category/" + id + "/subcategory/" + sub, {
       params: { cat: id, sub: sub },
     });
@@ -29,12 +29,12 @@ export default {
   },
   // Saves a new  ticket to the database
   createTicket: function (ticketData) {
-    console.log("in createTicket");
+    //console.log("in createTicket");
     return axios.post("/api/tickets", ticketData);
   },
   // updates a  ticket to the database
   updateTicket: function (id, ticketData) {
-    console.log("in updateTicket");
+    //console.log("in updateTicket");
     return axios.put("/api/tickets/" + id, ticketData);
   },
 };

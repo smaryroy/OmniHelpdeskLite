@@ -31,16 +31,16 @@ class SignUpPage extends Component {
     axios
       .post("/auth/signup", { username, password })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         if (response.status === 200) {
-          console.log("reg success");
+          //console.log("reg success");
           this.setState({ message: "" });
           this.props.updateUser("isLoggedIn", "true");
           this.props.gotoMain();
         }
       })
       .catch((error) => {
-        console.log("register error", error);
+        //console.log("register error", error);
         this.setState({ message: "Registration failed: " + error });
       });
   };

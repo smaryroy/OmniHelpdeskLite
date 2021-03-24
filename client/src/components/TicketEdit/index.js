@@ -15,7 +15,7 @@ function TicketPage(props) {
   // e.g. localhost:3000/books/599dcb67f0f16317844583fc
   const { id } = useParams();
   useEffect(() => {
-    console.log(props);
+    //console.log(props);
     if (props.isLoggedIn) {
       loadTicket(id);
     } else {
@@ -25,7 +25,7 @@ function TicketPage(props) {
   }, []);
 
   function loadTicket(id) {
-    console.log("in loadTicket", id);
+    //console.log("in loadTicket", id);
     if (!id) return;
     API.getTicket(id)
       .then((res) => setTicket(res.data))
@@ -35,7 +35,7 @@ function TicketPage(props) {
   function handleChange(e) {
     let fieldName = e.target.name;
     let fleldVal = e.target.value;
-    console.log("change", fieldName, fleldVal);
+    //console.log("change", fieldName, fleldVal);
     ticket[fieldName] = fleldVal;
     const newTicket = {
       _id: ticket._id ? ticket._id : null,
@@ -56,7 +56,7 @@ function TicketPage(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("saving", ticket);
+    //console.log("saving", ticket);
     if (ticket._id) {
       API.updateTicket(ticket._id, ticket)
         .then((res) => setTicket({ tickets: res.data }))

@@ -16,7 +16,7 @@ const strategy = new LocalStrategy(
       if (!user.checkPassword(password)) {
         return done(null, false, { message: "Incorrect password" });
       }
-      console.log("find user", user);
+      //console.log("find user", user);
       return done(null, user);
     });
   }
