@@ -17,7 +17,7 @@ function TicketPage(props) {
   useEffect(() => {
     console.log(props);
     if (props.isLoggedIn) {
-      loadTicket();
+      loadTicket(id);
     } else {
       props.gotoLogin();
     }
@@ -25,7 +25,7 @@ function TicketPage(props) {
   }, []);
 
   function loadTicket(id) {
-    console.log("in loadTicket");
+    console.log("in loadTicket", id);
     if (!id) return;
     API.getTicket(id)
       .then((res) => setTicket(res.data))
@@ -178,8 +178,8 @@ function TicketPage(props) {
               </Form.Group>
             </Form.Row>
 
-            <Button variant="primary" type="submit">
-              Submit
+            <Button className="save-btn" variant="primary" type="submit">
+              Save
             </Button>
           </Form>
         </Col>

@@ -259,7 +259,10 @@ class TicketPage extends React.Component {
                                   <Card.Text>{ticket.description}</Card.Text>
                                 </Col>
                                 <Col className="aln-right">
-                                  <Link to={"/tickets/" + ticket._id}>
+                                  <Link
+                                    className="detail-link"
+                                    to={"/tickets/" + ticket._id}
+                                  >
                                     See Details
                                   </Link>
                                 </Col>

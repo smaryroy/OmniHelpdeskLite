@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const app = express();
+const mongoose = require("mongoose");
 const port = process.env.PORT || 3001;
 
 /* Express setup */
@@ -16,14 +18,30 @@ if (process.env.NODE_ENV === "production") {
 const routes = require("./server/routes");
 app.use(routes);
 
-const db = require("./server/models");
+//database
+
+mongoose
+  .connect(process.env.MONGODB_URI || process.env.DBURL, {
+    useNewUrlParser: true,
+  })
+  .then(
+    () => {
+      /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
+      console.log("Connected to Mongo");
+    },
+    (err) => {
+      /** handle initial connection error */
+      console.log("error connecting to Mongo: ");
+      console.log(err);
+    }
+  );
 
 // Sessions
 const MongoStore = require("connect-mongodb-session")(session);
 app.use(
   session({
     secret: "hownowbrowncow", //pick a random string to make the hash that is generated secure
-    store: new MongoStore({ mongooseConnection: db.Connection }),
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: false, //required
     saveUninitialized: false, //required
   })

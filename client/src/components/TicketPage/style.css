@@ -58,3 +58,8 @@
   background-color: #ffde17;
   border-color: #ffde17;
 }
+
+.detail-link {
+  font-size: small;
+  font-weight: bold;
+}
