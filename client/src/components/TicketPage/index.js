@@ -34,17 +34,26 @@ class TicketPage extends React.Component {
 
   // Loads all tickets and sets them to tickets
   loadTickets() {
-    //console.log("loadTickets", this.state.searchValue);
     API.getTickets()
       .then((res) => {
-        this.setState({ tickets: Array.from(res.data) });
+        if (Array.isArray(res.data)) {
+          this.setState({ tickets: res.data });
+        } else {
+          this.setState({ tickets: [] });
+        }
       })
       .catch((err) => console.log(err));
   }
 
   getByStatus(id) {
     API.getByStatus(id)
-      .then((res) => this.setState({ tickets: res.data }))
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          this.setState({ tickets: res.data });
+        } else {
+          this.setState({ tickets: [] });
+        }
+      })
       .catch((err) => console.log(err));
   }
 
@@ -53,11 +62,23 @@ class TicketPage extends React.Component {
     const id = cat;
     if (!sub) {
       API.getByCategory(id)
-        .then((res) => this.setState({ tickets: res.data }))
+        .then((res) => {
+          if (Array.isArray(res.data)) {
+            this.setState({ tickets: res.data });
+          } else {
+            this.setState({ tickets: [] });
+          }
+        })
         .catch((err) => console.log(err));
     } else {
       API.getByCategorySub(cat, sub)
-        .then((res) => this.setState({ tickets: res.data }))
+        .then((res) => {
+          if (Array.isArray(res.data)) {
+            this.setState({ tickets: res.data });
+          } else {
+            this.setState({ tickets: [] });
+          }
+        })
         .catch((err) => console.log(err));
     }
   }
@@ -234,7 +255,7 @@ class TicketPage extends React.Component {
             </Row>
             <Row>
               <Col sm={12}>
-                {this.state.tickets && this.state.tickets.length ? (
+                {this.state.tickets.length ? (
                   <div className="scroll-div">
                     <ListGroup className="ticket-list">
                       {this.state.tickets.map((ticket) => (
