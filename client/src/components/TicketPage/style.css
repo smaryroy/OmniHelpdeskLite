@@ -63,3 +63,18 @@
   font-size: small;
   font-weight: bold;
 }
+
+.btn-primary:hover {
+  background-color: #ffde17;
+  border-color: #ffde17;
+}
+
+.btn-primary:active {
+  color: #262262;
+}
+
+a:link,
+a:active,
+a:visited {
+  color: #262262;
+}
