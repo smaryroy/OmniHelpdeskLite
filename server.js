@@ -37,12 +37,11 @@ mongoose
   );
 
 // Sessions
-//const MongoStore = require("connect-mongodb-session")(session);
+
 const MongoStore = require("connect-mongo");
 app.use(
   session({
     secret: "hownowbrowncow", //pick a random string to make the hash that is generated secure
-    //store: new MongoStore({ mongooseConnection: mongoose.connection }),
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI || process.env.DBURL,
       dbName: "example-db",
